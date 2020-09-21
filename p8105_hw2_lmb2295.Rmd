@@ -1,0 +1,24 @@
+---
+title: "Homework 1"
+author: "Laya Buchanan"
+
+date: 2020-09-21
+output: github_document
+---
+
+This is my submission for the second homework assignment for P8105.  
+
+# Section 1
+
+Here's a **code chunk** that samples from 
+a _normal distribution_:
+
+```{r}
+samp = rnorm(100)
+length(samp)
+```
+
+# Section 2
+
+I can take the mean of the sample, too!
+The mean is `r mean(samp)`.
