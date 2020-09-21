@@ -25,11 +25,11 @@ library(haven)
 
 # Problem 2: NYC Transit Data
 
-## Read in some data
+## Read in the data
 
 Read in the NYC Transit dataset. 
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 transit_df = read_csv("./data/NYC_Transit_Data.csv")
 ```
 
@@ -56,17 +56,50 @@ This data now contains the variables: line, station name, station latitude, stat
 
 This code creates a table that only lists distinct stations:
 ```{r}
-stations = 
-  select(transit_df,line, station_name) %>% 
-  distinct()
+stations_df = 
+  distinct(transit_df,line, station_name, .keep_all = TRUE)
 
 ```
 
 There are 465 unique stations.
 
+
+This code creates a table that only lists distinct stations that are ADA compliant
+
+```{r}
+ada_df =
+  filter(stations_df, ada == TRUE)
+```
+
+84 stations are ADA compliant.
+
+
+This code creates a table that only lists station entrances/exits without vending
+```{r}
+vending_df = 
+  transit_df %>% 
+  mutate(vending = recode(vending, "YES" = TRUE, "NO" = FALSE)) %>% 
+  filter(vending == FALSE)
+```
+
+There are 183 station entrances/exits without vending.
+
+
+This code creates a table that only lists station entrances/exits without vending that also allow entrance.
+```{r}
+allow_df = 
+  vending_df %>% 
+  filter(entry == TRUE)
+```
+
+There are 69 entrances/exits without vending that also allow entrance.
+
+As there are 183 station entrances/exits without vending and only 69 of them allow entrance, we can conclude that `r (69/183)*100`% of station entrances / exits without vending allow entrance.
+
+
 # Problem 3: FiveThirtyEight Data
 
-## Read in some data
+## Read in the data
 
 Read in the the FiveThirtyEight data
 
