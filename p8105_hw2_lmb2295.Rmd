@@ -8,6 +8,14 @@ output: github_document
 
 This is my submission for the second homework assignment for P8105.  
 
+
+```{r message = FALSE, echo = FALSE}
+library(tidyverse)
+library(readxl)
+library(haven)
+```
+
+
 # Problem 1: Mr Trash Wheel
 
 
@@ -16,12 +24,6 @@ This is my submission for the second homework assignment for P8105.
 ```
 
 # Problem 2: NYC Transit Data
-
-```{r message = FALSE, echo = FALSE}
-library(tidyverse)
-library(readxl)
-library(haven)
-```
 
 ## Read in some data
 
@@ -33,7 +35,35 @@ transit_df = read_csv("./data/NYC_Transit_Data.csv")
 
 ## Clean the data
 
+Clean up column names:
+
 ```{r warning = FALSE, message = FALSE, results = "hide"}
 transit_df = janitor::clean_names(transit_df)
 ```
 
+Select relevant variables:
+```{r}
+transit_df =select( transit_df, line, station_name, station_latitude, station_longitude, route1, route3, route5, route7, route9, route11, entry, entrance_type, vending, ada)
+```
+
+# Problem 3: FiveThirtyEight Data
+
+## Read in some data
+
+Read in the the FiveThirtyEight data
+
+```{r}
+pols_month = read_csv("./data/pols_month.csv")
+snp = read_csv("./data/snp.csv")
+unemployment = read_csv("./data/unemployment.csv")
+```
+
+## Clean the data
+
+Clean up column names:
+
+```{r warning = FALSE, message = FALSE, results = "hide"}
+pols_month = janitor::clean_names(pols_month)
+snp = janitor::clean_names(snp)
+unemployment = janitor::clean_names(unemployment)
+```
