@@ -44,10 +44,13 @@ transit_df = janitor::clean_names(transit_df)
 Select relevant variables and convert the entry variable from character to logical:
 ```{r message = FALSE, results = "hide"}
 transit_df =
-  select( transit_df, line, station_name, station_latitude, station_longitude, route1, route3, route5, route7, route9, route11, entry, entrance_type, vending, ada) %>% 
+  select( transit_df, line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entry, entrance_type, vending, ada) %>% 
   mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 
 ```
+
+This data now contains the variables: line, station name, station latitude, station longitude, whether entry is allowed, whether vending exists, entrance type, and ADA compliance, as well as routes #2-11 existing as their own variables. So far, I have cleaned the column names and converted the "entry" variable from a character variable to a logical variable. There are 19 total columns and 1,868 observations in this dataset. These data are mostly tidy, however, it would be better if route number and route name were distinct variables.
+
 
 ```{r}
 
