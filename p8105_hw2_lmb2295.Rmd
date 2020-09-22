@@ -150,15 +150,24 @@ Clean up column names, separate the mon variable in pols_month into integer vari
 pols_month =
   janitor::clean_names(pols_month) %>% 
   separate(mon, into = c("year", "month", "day")) %>% 
-  mutate(month = recode(month, `01` = "january", `02` = "february",  `03` = "march", `04` = "april", `05` = "may", `06` = "june", `07` = "july", `08` = "August", `09` = "september", `10` = "october", `11` = "november", `12` = "december",)) %>% 
-  relocate(prez_dem, .after =prez_gop) %>% 
+  mutate(month = recode(month, `01` = "january", `02` = "february",  `03` = "march", `04` = "april", `05` = "may", `06` = "june", `07` = "july", `08` = "august", `09` = "september", `10` = "october", `11` = "november", `12` = "december",)) %>% 
+  relocate(prez_dem, .after = prez_gop) %>% 
   pivot_longer(
     prez_gop:prez_dem,
     names_to = "president",
     names_prefix = "prez_"
   ) %>% 
-  select(-day)
+  select(-day) %>% 
+  arrange(year, month)
 
-snp = janitor::clean_names(snp)
+snp = 
+  janitor::clean_names(snp) %>% 
+  separate(date, into = c("month", "day", "year")) %>%
+  mutate(month = recode(month, `1` = "january", `2` = "february",  `3` = "march", `4` = "april", `5` = "may", `6` = "june", `7` = "july", `8` = "august", `9` = "september", `10` = "october", `11` = "november", `12` = "december")) %>%
+  select(-day) %>% 
+  relocate(month, .after = year) %>% 
+  arrange(year, month)
+
+
 unemployment = janitor::clean_names(unemployment)
 ```
