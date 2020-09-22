@@ -97,6 +97,23 @@ There are 69 entrances/exits without vending that also allow entrance.
 As there are 183 station entrances/exits without vending and only 69 of them allow entrance, we can conclude that `r (69/183)*100`% of station entrances / exits without vending allow entrance.
 
 
+```{r}
+as.character(pull(transit_df, route8))
+as.character(pull(prob1_df, route9))
+as.character(pull(prob1_df, route8))
+as.character(pull(prob1_df, route8))
+
+route_name_df = 
+  mutate(route8 = recode(route8, "1" = `1`, "2" = `2`))
+  pivot_longer(
+    transit_df,
+    route1:route11,
+    values_to = "route_name") 
+  
+```
+
+
+
 # Problem 3: FiveThirtyEight Data
 
 ## Read in the data
