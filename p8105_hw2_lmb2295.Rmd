@@ -148,15 +148,16 @@ The code chunk below cleans up column names for the datasets pols_month_df, snp_
 
 For the pols_month_df dataset, it separates the mon variable into integer variables year, month, and day, creates a president president variable taking values gop and dem, removing the prez_dem and prez_gop variables and removes the day variable:
 
-For the snp_df dataset, it separates the date variable into integer variables year, month, and day, rearranges the month and year columns to match pols_month_df, and removes the day variable.
+For the snp_df dataset, it separates the date variable into integer variables year, month, and day, rearranges the month and year rows to match pols_month_df, and removes the day variable.
 
-All of the datasets are finally arranged by year and month to prepare for joining.
+For the unemployment_df dataset, the code transforms the several month/unemployment variables to two distinct month and unemployment rate variables, reformats the month values to match the datasets above, converts the year values from numeric to character so the dataset can later be joined with the ones above, and rearranges the month and year rows to match pols_month_df and snp_df.
+
 
 ```{r message = FALSE, results = "hide"}
 pols_month_df =
   janitor::clean_names(pols_month_df) %>% 
   separate(mon, into = c("year", "month", "day")) %>% 
-  mutate(month = recode(month, `01` = "january", `02` = "february",  `03` = "march", `04` = "april", `05` = "may", `06` = "june", `07` = "july", `08` = "august", `09` = "september", `10` = "october", `11` = "november", `12` = "december",)) %>% 
+  mutate(month = recode(month, `01` = "january", `02` = "february",  `03` = "march", `04` = "april", `05` = "may", `06` = "june", `07` = "july", `08` = "august", `09` = "september", `10` = "october", `11` = "november", `12` = "december")) %>% 
   relocate(prez_dem, .after = prez_gop) %>% 
   pivot_longer(
     prez_gop:prez_dem,
@@ -184,12 +185,13 @@ unemployment_df =
     values_to = "unemployment_rate"
   ) %>% 
   mutate(month = recode(month, `jan` = "january", `feb` = "february",  `mar` = "march", `arp` = "april=", `jun` = "june", `jul` = "july", `aug` = "august", `sep` = "september", `oct` = "october", `nov` = "november", `dec` = "december")) %>% 
-  arrange(year, month) %>% 
+  mutate(year = as.character(year)) %>% 
+  arrange(year, month)
   
 ```
 
 
-## Clean the data
+## Join the data
 
 ```{r}
 intermediate_df = 
@@ -200,4 +202,4 @@ fivethirtyeight_df =
 ```
 
 
-The dataset pols-month (now pols_month_df) originally contained 822 observations and 9 variables. The variables of interest for this assignment are: mon (date of the count), prez_gop (indicator of whether the president was republican on the associated date), and prez_dem (indicator of whether the president was democratic on the associated date). The dataset snp_df originally contained 787 observations of two variables: the date of the observation and the closing values of the S&P stock index on the associated date. The dataset unemployment_df originally contained a variable for year, as well as unemployemnt listed by month, with each month existing as a unique variable with unemployment as a value.
+The dataset pols-month (now pols_month_df) originally contained 822 observations and 9 variables. This dataset has a time range from 1947 to 2015. The variables of interest for this assignment are: mon (date of the count), prez_gop (indicator of whether the president was republican on the associated date), and prez_dem (indicator of whether the president was democratic on the associated date). The dataset snp_df originally contained 787 observations of two variables: the date of the observation and the closing values of the S&P stock index on the associated date. This dataset has a time range from 1950 to 2015. The dataset unemployment_df originally had 68 obs and 13 variables, containing a variable for year, as well as unemployment listed by month, with each month existing as a unique variable with unemployment as a value. This dataset has a time range from January to 2015. After merging snp_df into pols_month_df, and merging the unemployment_df into the resulting dataset, the final result it fivethirtyeight_df. This dataset has a time range from 1947 to 2015. It has 1644 observations and 12 variables, the key variables being year, month, president, close, and unemployment rate. 
